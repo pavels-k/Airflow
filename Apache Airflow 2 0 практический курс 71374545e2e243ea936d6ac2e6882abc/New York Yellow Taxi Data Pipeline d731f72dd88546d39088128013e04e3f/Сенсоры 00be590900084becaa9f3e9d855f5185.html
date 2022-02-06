@@ -1,0 +1,690 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Сенсоры</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="00be5909-0008-4bec-aa9f-3e9d855f5185" class="page sans"><header><h1 class="page-title">Сенсоры</h1></header><div class="page-body"><p id="3efd6141-c8aa-413f-99e4-49656acb5fae" class="">О сенсорах я вкратце рассказывал в разделе про основные компоненты Apache Airflow. Сейчас же самое время попробовать их на практике.</p><p id="b4d7acd3-c552-4dc1-90ee-9414c2d4e899" class="">Сенсоры это разновидность операторов, чья задача реагировать на какое-либо событие и в зависимости от результата продолжать цепочку выполнения тасков или &quot;засыпать&quot; для повторной проверки через X секунд. Например, вы ожидаете появление файла в источнике (S3-бакет, FTP-сервер и т.д.). Если файл на месте, то можно продолжить цепочку задач — скачать, преобразовать, загрузить в другое место. Если файла ещё нет, то сенсор повторит проверку через заданное время (в секундах).</p><p id="1327f710-83d1-4699-8431-4067359d083d" class="">В Apache Airflow существует ряд готовых сенсоров на все случаи жизни:</p><ol type="1" id="cf4d3ba7-07fb-4e46-be97-1ff5dc83b193" class="numbered-list" start="1"><li>PythonSensor — выполняет функцию, переданную в <code>python_callable</code>, и в случае, если она возвращает True продолжает цепочку дальше.</li></ol><ol type="1" id="80a338d1-ed3a-431a-9551-4f98425385b5" class="numbered-list" start="2"><li>DateTimeSensor — ждёт наступления заданной даты и времени</li></ol><ol type="1" id="834bac42-cc2d-4a72-85e3-4a3a93ba4ef2" class="numbered-list" start="3"><li>S3KeySensor — ждёт появления S3-объекта по переданному пути</li></ol><ol type="1" id="80912bab-443a-41c9-8427-dabc2519aa48" class="numbered-list" start="4"><li>FileSensor — проверяет появился ли файл или директория с файлом по заданному пути</li></ol><ol type="1" id="88770ce3-f461-468c-a90c-00d015f5a8f0" class="numbered-list" start="5"><li>HttpSensor — делает запрос на заданный URL, повторяет его пока удалённый хост не вернёт успешный запрос (статусы 2xx)</li></ol><p id="ddb2225d-d6b2-426b-9db6-6ce7f5177eb0" class="">Это далеко не весь список сенсоров, с базовыми сенсорами Airflow можно познакомиться по <a href="https://github.com/apache/airflow/tree/master/airflow/sensors">ссылке</a>.</p><p id="5ded8aa1-e7de-4e40-a76d-e2b5c9ab6155" class="">Как же нам применить сенсоры в работе с датасетом поездок на такси? Очень просто. Можно заменить <code>SimpleHttpOperator</code> на <code>HttpSensor</code> с минимальными модификациями. Во-первых, будет происходить точно такая же проверка наличия файла перед его загрузкой. Во-вторых, в случае если файла нет на сервере, то таск не будет падать, а будет автоматически перезапускаться через заданный интервал для повторной проверки.</p><p id="b2cc40ba-f0c9-4087-8913-1dba729e2c00" class="">Обратите внимание, что на сайте <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page</a> нет данных за 2021 год хотя прошло 2 полных месяца (январь и февраль), датасеты появляются с задержкой в несколько месяцев. Поэтому реализация через сенсор имеет большой плюс — не нужно самостоятельно следить когда данные появятся на сайте и перезапускать DAG для конкретного месяца. Датасет будет загружен автоматически как только данные станут доступны на сайте.</p><p id="fd6e10f6-5aea-4abc-9fc8-1e5ba0e080fa" class="">Приступим к реализации.</p><h2 id="2a1b14ee-0de5-4772-9b1a-2d0bb436ef27" class=""><strong>HttpSensor</strong></h2><p id="50acc09f-efe3-4049-bce3-a85b162bd580" class="">HttpSensor очень похож на SimpleHttpOperator с той лишь разницей, что умеет повторять запросы в случае, если критерий успеха не был удовлетворен. Критерием успеха является HTTP-код ответа. Если сервер вернул статус 200 (включая все 2xx статусы), то цепочка продолжится дальше, а если ответ был 404, то запрос повторится через заданный интервал. Также можно передать callable-объект в аргумент <code>response_check</code>, чтобы провести дополнительную проверку и задать свой критерий успеха.</p><pre id="38c0401b-b26d-4b1c-b8fb-a8c2cdc7eb4e" class="code code-wrap"><code>from airflow.providers.http.sensors.httpimport HttpSensor
+
+check_if_exists = HttpSensor(
+    method=&#x27;HEAD&#x27;,
+    endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+    http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;,
+    task_id=&#x27;check_if_exists&#x27;,
+    poke_interval=60 * 60,  # каждый час
+    mode=&#x27;poke&#x27;,
+)
+</code></pre><p id="fbc01965-9c01-40ae-ad9c-197b17b4b9b5" class="">Помимо знакомых уже параметров <code>method</code>, <code>endpoint</code>, <code>http_conn_id</code>, обратите внимание на два новых:</p><ol type="1" id="c1e4c899-1f89-4d2e-982e-9f2788cee3fb" class="numbered-list" start="1"><li><code>poke_interval</code> — интервал ожидания между повторными проверками <strong>в секундах</strong></li></ol><ol type="1" id="8a29acdb-7361-42e7-be9c-7bf962f348fa" class="numbered-list" start="2"><li><code>mode</code> — режим проверок, по умолчанию равен <code>poke</code>.</li></ol><h2 id="ee5e0577-f5d3-4561-8a41-72e58a18dffc" class=""><strong>Режимы mode</strong></h2><p id="66ece639-7db8-4d6a-8a03-4f29b2655feb" class="">Начиная с Apache Airflow 1.10.2 у сенсоров появился аргумент <code>mode</code> через который задаётся режим их работы. Сейчас есть 2 основных режима:</p><ol type="1" id="ec574484-fdab-4f65-9f97-04f66bcc8064" class="numbered-list" start="1"><li>poke</li></ol><ol type="1" id="ed51ed52-3232-4d2b-a015-94db3aa58f49" class="numbered-list" start="2"><li>reschedule</li></ol><p id="9ffbca04-6338-4594-b11d-b4b83e23739d" class="">Также есть smart sensor, который нужно активировать через <code>airflow.cfg</code>, но о нём читайте в конце курса.</p><p id="d6dfc622-d435-4817-ac74-68cb0e53fc49" class="">Что же выбрать между <code>poke</code> и <code>reschedule</code>? Если сенсор работает в режиме <code>poke</code>, то воркер, исполняющий его, всегда находится в режиме работы и не может исполнять другие задачи (между <code>poke_interval</code> у него выполняется sleep). Я не рекомендую использовать этот режим, если у вас большой интервал ожидания между периодическими проверками. Используйте <code>poke</code>, если требуется часто делать проверку (до 1 минуты), для всего что дольше — <code>reschedule</code>. В режиме <code>reschedule</code> воркер освобождается, и сенсор помечается для повторного перезапуска через <code>poke_interval</code> (в случае, если критерий успеха не был достигнут и нужен перезапуск).</p><h2 id="233955a0-29c8-4542-a06c-9c6e7aad91b7" class=""><strong>DAG</strong></h2><p id="b9de2f4b-d279-4548-b560-83a078be0bcf" class="">Всё готово для реализации DAGа на сенсоре. Необходимо заменить SimpleHttpOperator на HttpSensor и добавить 2 дополнительных аргумента: mode и poke_interval. Делать проверку чаще 1 раза в сутки нет мысла, но можно делать реже. Я для простоты указал интервал раз в 24 часа в секундах (60 * 60 * 24).</p><pre id="287576d8-6ee9-4621-9661-4e655e473960" class="code code-wrap"><code>import datetimeas dt
+
+from airflowimport DAG
+from airflow.decoratorsimport task
+from airflow.operators.pythonimport get_current_context
+from airflow.providers.http.sensors.httpimport HttpSensor
+
+from nyc_taxi.functionsimport download_dataset, convert_to_parquet
+
+default_args = {
+    &#x27;owner&#x27;: &#x27;airflow&#x27;,
+}
+
+with DAG(
+    start_date=dt.datetime(2021, 1, 1),
+    dag_id=&#x27;nyc_taxi_2021_dag&#x27;,
+    schedule_interval=&#x27;@monthly&#x27;,
+    default_args=default_args,
+)as dag:
+
+    check_if_exists = HttpSensor(
+        method=&#x27;HEAD&#x27;,
+        endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+        http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;,
+        task_id=&#x27;check_if_exists&#x27;,
+        poke_interval=60 * 60 * 24,  # раз в 24 часа
+        mode=&#x27;reschedule&#x27;,
+    )
+
+    @task
+defdownload_file():
+        context = get_current_context()
+return download_dataset(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;))
+
+    @task
+defto_parquet(file_path: str):
+        context = get_current_context()
+return convert_to_parquet(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;), file_path)
+
+    file_path = download_file()
+    parquet_file_path = to_parquet(file_path)
+
+    check_if_exists &gt;&gt; file_path &gt;&gt; parquet_file_path
+</code></pre><p id="0bc33f16-624a-4767-b7cd-0bbd776cde56" class="">Ссылка на DAG в репозитории — <a href="https://github.com/adilkhash/apache-airflow-course-materials/blob/master/dags/nyc_taxi_2021_sensor.py">nyc_taxi_2021_sensor.py</a></p><p id="efd83209-36a8-4ac1-9bc8-95049e7233ff" class="">
+</p></div></article></body></html>

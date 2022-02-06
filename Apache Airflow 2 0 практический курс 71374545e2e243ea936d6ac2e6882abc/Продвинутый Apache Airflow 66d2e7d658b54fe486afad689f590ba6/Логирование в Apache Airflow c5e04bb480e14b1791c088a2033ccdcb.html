@@ -1,0 +1,685 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Логирование в Apache Airflow</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c5e04bb4-80e1-4b17-91c0-88a2033ccdcb" class="page sans"><header><h1 class="page-title">Логирование в Apache Airflow</h1></header><div class="page-body"><p id="682d44ef-c9b9-420f-98c5-f031cc1372ce" class="">Логирование в Apache Airflow использует стандартный пакет из библиотеки Python — <code>logging</code>. Если вы ранее не работали с логированием, рекомендую ознакомиться с моей практической статьей про эту замечательную библиотеку у меня в блоге — <a href="https://khashtamov.com/ru/python-logging/">Введение в logging на Python</a>.</p><p id="144b70f4-cc18-4275-9c1f-f8dd7dce8e56" class="">По умолчанию Airflow пишет все логи в директорию <code>$AIRFLOW_HOME/logs</code>, но можно изменить путь перезаписав опцию <code>base_log_folder</code> в <code>airflow.cfg</code>.</p><p id="dd7928b3-7a04-41d1-95ab-c362250d4251" class="">Важно понимать как часто пишутся логи, т.к. они могут очень быстро заполнить дисковое пространство. Ниже скрин со статистикой с размером директории с логами и каждой папки внутри.</p><figure id="93df2c75-289d-4cef-a089-db34240fb2aa" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-04-10_00-17-43.png"><img src="https://startdatajourney.com/uploads/redactor/2021-04-10_00-17-43.png"/></a></figure><p id="f61a01db-08b5-47a3-959e-f2e9803143c7" class="">Папка с логами занимает 1.5 Гигабайта, а больше всех весит папка с логами планировщика <code>logs/scheduler</code>. И это несмотря на то, что в Airflow крутятся учебные пайплайны. Почему логи планировщика растут как на дрожжах? Всему виной уровень логирования и частота записи. По умолчанию Airflow устанавливает уровень логирования <code>INFO</code>, поменять его можно через опцию <code>logging_level</code>. Но основной же причиной роста логов у планировщика является опция <code>min_file_process_interval</code>, по умолчанию значение равно 1-й секунде. Опция отвечает за интервал между парсингом всех имеющихся DAG-файлов в директории, указанной в <code>dags_folder</code>. Проще говоря, это время через которое планировщик подтянет все изменения внутри DAG-файла, значение выставить можно индивидуально. У меня оно равно 120 секундам.</p><h2 id="0c37f1c1-bee0-40f2-a7aa-b01ee5c037c1" class=""><strong>Структура логов</strong></h2><p id="9c4da5ec-89de-49e8-b968-e3fe30488160" class="">Если внимательно приглядеться на содержимое папки с логами, то можно понять структуру. Шаблон записи логов следующий:</p><pre id="0b6e818d-48c0-4458-b599-112a49fe841b" class="code code-wrap"><code>&lt;dag_id&gt;/&lt;task_id&gt;/&lt;execution_date&gt;/&lt;retry_number&gt;.log
+</code></pre><p id="2dc360bc-49b2-4451-a2e9-a1e66ef52e09" class="">Где <code>retry_number</code> это номер попытки выполнения DAG. Количество файлов равно количеству, заданному в параметре <code>retries</code> при определении DAG. Шаблон лога можно изменить, перезаписав опцию <code>log_filename_template</code>:</p><pre id="fbb70190-232b-4da6-af28-512721c3e6de" class="code code-wrap"><code>log_filename_template = {{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log
+</code></pre><p id="19a549e8-c0da-4077-a682-cc1a55733568" class="">Формат сообщений логов можно изменить через параметр <code>log_format</code> в <code>airflow.cfg</code>, по умолчанию его значение:</p><pre id="c0763400-eecd-4bc0-8abc-dfb44d1e1511" class="code code-wrap"><code>log_format = [%%(asctime)s] {%%(filename)s:%%(lineno)d} %%(levelname)s - %%(message)s
+</code></pre><p id="c19e2f8d-7ac5-4698-90fc-17385108f08a" class="">Также Apache Airflow поддерживает запись логов на удалённый хост, например, на AWS S3, Google Storage или ElasticSearch.</p><h2 id="c0222f9d-22e1-48a3-ab77-cde97b285c2b" class=""><strong>Настройка remote logging</strong></h2><p id="74eb8e65-5a95-4681-ab1d-78cbf04f4173" class="">С remote logging всё максимально просто. В <code>airflow.cfg</code> есть несколько параметров, которые необходимо изменить.</p><p id="6e8b5cc4-5d43-4f77-adf0-06df759a7f81" class="">Во-первых, для активации remote logging необходимо параметр remote_logging изменить с False на True:</p><pre id="2cc95430-57e0-4ace-90f3-81a9fcecc5f3" class="code code-wrap"><code>remote_logging = True
+</code></pre><p id="a723a2c7-8dd3-4bb7-b9a7-bbfcee464b58" class="">Во-вторых, в параметр <code>remote_log_conn_id</code> необходимо прописать connection id, заранее созданный в панели Airflow (Admin → Connections). Если используете Google Storage, то нужно в <code>google_key_path</code> указать путь до Google Credential JSON.</p><p id="cca67aec-2867-45f8-a2be-a8d629429145" class="">В-третьих, указать путь до бакета куда будут складироваться логи в параметре <code>remote_base_log_folder</code>. Для AWS S3 путь должен начинаться с <code>s3://</code>, для GCS с <code>gs://</code>.</p><p id="249d1f74-77ab-4285-9f00-39351bef76e2" class="">Отмечу, что включение опции remote logging не отключает запись на локальный диск. Apache Airflow загружает лог на удалённый хост только после записи файла в локальное хранилище, т.е. логи на тот же S3 загружаются с той машины, где они были записаны и только после того как задача (task) отработала.</p><p id="8aa78212-3b42-4d3a-88c3-64d753b3cec2" class="">В админке Airflow же приоритет в первую очередь отдаётся логам на удалённом хосте (S3, GCS и т.д.), если удалённые логи недоступны, то отображены будут локальные логи.</p><h2 id="fd1ae43a-8bac-4f5e-bd99-810742230355" class=""><strong>Кастомная настройка логеров</strong></h2><p id="76979a23-0794-42c9-9ba3-afc0de1996f2" class="">Но одним лишь remote logging мы не ограничены. Так как Apache Airflow использует стандартный пакет logging для журналирования, то у вас есть возможность расширить его возможности на своё усмотрение. Если вы не знакомы с logging, то <a href="https://khashtamov.com/ru/python-logging/">рекомендую мою статью</a> для ознакомления перед чтением этого раздела. Далее мы разберём как выглядит конфигурация для Airflow logging, и напишем свой Handler для отправки ошибок в телеграм.</p><p id="162b111a-c2d7-4531-b6f1-42919b40501c" class="">Шаблон из которого формируется logging config лежит <a href="https://github.com/apache/airflow/blob/2.0.1/airflow/config_templates/airflow_local_settings.py#L57">тут</a>. Это <a href="https://khashtamov.com/ru/python-logging/#logging_config">стандартный словарь</a> для конфигурирования пакета logging в Python. Apache Airflow позволяет указать свой конфиг, переопределив опцию <code>logging_config_class</code>. Для неё необходимо прописать путь до переменной, хранящей словарь с logging-конфигурацией. Я не рекомендую перезаписывать существующие настройки logging без надобности, т.к. это может привести к некорректной работе системы журналирования Airflow. Вместо перезаписи будем расширять.</p><p id="79bc8f96-74b1-4585-bebd-25464bd4d906" class="">Представим, что вам нужно оперативно получать всю информацию об ошибках в тасках в телеграм. Есть несколько способов решить эту задачу:</p><ul id="327d396b-2ee1-4757-bbf1-acf8a0d771cc" class="bulleted-list"><li>Определить <code>on_failure_callback</code></li></ul><ul id="9b140a3f-ec91-4ae0-bb54-68473abb426f" class="bulleted-list"><li>Самостоятельно в коде тасков отправлять сообщения об ошибках в телеграм (не делайте так)</li></ul><ul id="fa364d9a-e720-4bd0-b06c-369a6ca0c9fb" class="bulleted-list"><li>Добавить свой Handler в logging-конфигурацию</li></ul><p id="d758e57e-2c0f-4c2f-8f03-f70934a9c54d" class="">Неудобство callback-функции в том, что нужно не забыть прописать её везде. Самостоятельный контроль и отправка ошибок в телеграм неудобен для готовых non-Python операторов. А вот создание своего Handler-класса кажется универсальным решением, которое будет работать для всех DAG-классов и операторов, входящих в них.</p><p id="216b4b99-6731-4e3f-b995-8193243df46f" class="">В Apache Airflow есть <a href="https://github.com/apache/airflow/blob/2.0.1/airflow/config_templates/airflow_local_settings.py#L86">несколько логеров</a>:</p><ul id="7dd1bede-2336-4a2f-b075-377adcbd46a5" class="bulleted-list"><li>airflow.processor</li></ul><ul id="708f4443-0938-4a96-8d18-e39927bd95e0" class="bulleted-list"><li>airflow.task</li></ul><ul id="3ad336ed-40a8-4142-b991-6f711312e8d2" class="bulleted-list"><li>flask_appbuilder</li></ul><ul id="204173a9-0faf-42dd-b94b-310548cb70ac" class="bulleted-list"><li>root</li></ul><p id="ac3eaf38-7575-4d25-bcee-81798a8ae082" class=""><code>airflow.task</code> это то, что нам нужно. Его использует <a href="https://github.com/apache/airflow/blob/2.0.1/airflow/models/taskinstance.py#L287">класс TaskInstance</a> для записи логов обо всех операторах, выполняющихся в DAG-объекте.</p><p id="62241157-9c78-4773-8cec-d0c55f638950" class=""><code>airflow.processor</code> используется при парсинге DAG из python-модулей, за это отвечает планировщик.</p><p id="eaabd596-91ba-4192-a9bc-7a5e0f6b49eb" class=""><code>flask_appbuilder</code> это логер самого веб-приложения, построенного на веб-фреймворке Flask.</p><p id="6d9d72f6-e0eb-4eaa-bc08-4911353b304c" class=""><code>root</code> это корневой логер, который пишет в stdout.</p><h2 id="1d93a1de-6ee9-49d2-9bb4-ae830910f3f9" class=""><strong>Создаём Handler-класс</strong></h2><p id="49ec40c2-7fde-431f-88c1-242db5bb412e" class="">Идея заключается в том, чтобы добавить дополнительный обработчик (Handler) для логера <code>airflow.task</code>, который будет &quot;ловить&quot; сообщения (Log Record) уровня <code>ERROR</code> и посылать их в телеграм через телеграм-бота. Для работы с телеграмом я использую библиотеку <a href="https://github.com/eternnoir/pyTelegramBotAPI">pyTelegramBotAPI</a>.</p><pre id="d7b99b1a-1fa2-41c4-b526-c8277a781d42" class="code code-wrap"><code>from loggingimport Handler, LogRecord
+
+import telebot
+
+classTelegramBotHandler(Handler):
+def__init__(self, token: str, chat_id: str):
+        super().__init__()
+        self.token = token
+        self.chat_id = chat_id
+
+defemit(self, record: LogRecord):
+        bot = telebot.TeleBot(self.token)
+        bot.send_message(
+            self.chat_id,
+            self.format(record)
+        )
+</code></pre><p id="736ff2bc-68c1-44bb-abec-db5263789acc" class="">Такой же пример обработчика я описывал в <a href="https://khashtamov.com/ru/python-logging/">статье про logging</a>. Предварительно вам нужно создать телеграм-бота, используя бота <a href="https://t.me/BotFather">BotFather</a>. Если вы раньше никогда не работали с телеграм-ботами, то почитайте мою статью про <a href="https://khashtamov.com/ru/create-telegram-bot-in-python/">создание телеграм-ботов на python</a>.</p><h2 id="083d8162-3077-4e1a-a4ea-cfade1e19fab" class=""><strong>Конфигурация</strong></h2><p id="acb7014e-1bc4-43ec-a7ad-68d2d9fd2f07" class="">Итак, чтобы настроить свою конфигурацию logging необходимо сделать несколько шагов:</p><ol type="1" id="96520a94-b98e-4ed6-822f-e945d1eee130" class="numbered-list" start="1"><li>Создать свой python-модуль с конфигурацией</li></ol><ol type="1" id="96013b6f-7375-4d43-871f-deedfc2a1d6a" class="numbered-list" start="2"><li>Прописать путь до нашего модуля в <code>airflow.cfg</code></li></ol><p id="5e89b493-e91d-4b61-a479-e9c94b122dcc" class="">Полностью перезаписывать конфигурацию Airflow я не рекомендую, поэтому мы её будем дополнять. Для этого необходимо импортировать настройки по умолчанию и сделать глубокое копирование.</p><pre id="affcb13a-2e60-45a8-84d5-dbc89785dbbe" class="code code-wrap"><code>from copyimport deepcopy
+
+from airflow.config_templates.airflow_local_settingsimport DEFAULT_LOGGING_CONFIG
+
+LOGGING_CONFIG = deepcopy(DEFAULT_LOGGING_CONFIG)
+LOGGING_CONFIG[&#x27;handlers&#x27;].update(
+    {
+        &#x27;telegram_handler&#x27;: {
+            &#x27;class&#x27;: &#x27;logging_handlers.TelegramBotHandler&#x27;,
+            &#x27;chat_id&#x27;: &#x27;&lt;CHAT_ID&gt;&#x27;,
+            &#x27;token&#x27;: &#x27;&lt;BOT_TOKEN&gt;&#x27;,
+            &#x27;level&#x27;: &#x27;ERROR&#x27;,
+        }
+    }
+)
+LOGGING_CONFIG[&#x27;loggers&#x27;][&#x27;airflow.task&#x27;][&#x27;handlers&#x27;].append(&#x27;telegram_handler&#x27;)
+</code></pre><p id="35e8f63d-bbb5-408c-8bf6-47027f7c4214" class="">Тут я копирую структуру конфигурации и дополняю её нашим обработчиком. Для его корректной работы необходимо заменить <code>&lt;CHAT_ID&gt;</code> на свой, его можно узнать у бота <a href="https://t.me/userinfobot">userinfo</a>, и <code>&lt;BOT_TOKEN&gt;</code>, токен вы получаете у BotFather при создании бота.</p><p id="e56a2f8b-71b0-41fe-86fb-b0d177bf4646" class="">В настройках я предполагаю, что телеграм-обработчик лежит у вас в модуле <code>logging_handlers.py</code>, а файл с конфигурацией называется <code>logging_conf.py</code>.</p><p id="cfa67316-cba7-4f7c-9b75-beb4e28e654c" class="">А теперь вопрос. Куда всё это положить? В Apache Airflow есть код <a href="https://github.com/apache/airflow/blob/2.0.1/airflow/settings.py#L354">подготовки путей</a>:</p><pre id="7dc8bcfd-5ba6-4174-b7ec-c68fccdb767e" class="code code-wrap"><code>defprepare_syspath():
+    &quot;&quot;&quot;Ensures that certain subfolders of AIRFLOW_HOME are on the classpath&quot;&quot;&quot;
+if DAGS_FOLDERnotin sys.path:
+        sys.path.append(DAGS_FOLDER)
+
+    # Add ./config/ for loading custom log parsers etc, or
+    # airflow_local_settings etc.
+    config_path = os.path.join(AIRFLOW_HOME, &#x27;config&#x27;)
+if config_pathnotin sys.path:
+        sys.path.append(config_path)
+
+if PLUGINS_FOLDERnotin sys.path:
+        sys.path.append(PLUGINS_FOLDER)
+</code></pre><p id="fbbff099-019e-46c8-8198-bda3fbb67606" class="">Он обновляет <code>sys.path</code>, добавляя туда директорию с DAG-файлами, папку <code>config</code> и <code>plugins</code>, которые могут быть в директории <code>AIRFLOW_HOME</code>. Поэтому logging-конфиг можно положить в любую из этих директорий, но я не рекомендую укладывать его в директорию с DAG-файлами, т.к. она регулярно сканируется планировщиком для обнаружения новых пайплайнов. Если не хотите трогать эти пути, то можно прописать свой путь в переменную окружения <a href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH">PYTHONPATH</a>. Я предпочитаю держать папку <code>config</code> по пути из <code>AIRFLOW_HOME</code>.</p><figure id="de8e5301-a0aa-43a9-a9c3-531494823fa6" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-04-16_14-27-08.png"><img src="https://startdatajourney.com/uploads/redactor/2021-04-16_14-27-08.png"/></a></figure><p id="d135288b-9453-43df-ad59-8fca859129de" class="">Выполните следующие шаги:</p><ol type="1" id="b38fcafb-5e0a-4c44-9146-79d8c314bf27" class="numbered-list" start="1"><li>Сохраните код с logging-конфигурацией в <code>logging_conf.py</code></li></ol><ol type="1" id="553bcc80-b3dd-43d3-8774-d7e37e5daf9e" class="numbered-list" start="2"><li>Сохраните код с телеграм-обработчиком в <code>logging_handlers.py</code></li></ol><ol type="1" id="d58a1850-334f-49b7-8c6c-5128107aeb5f" class="numbered-list" start="3"><li>Создайте папку config в директории <code>$AIRFLOW_HOME</code></li></ol><ol type="1" id="b951b5ec-5464-4b2b-bd8a-1613312eed39" class="numbered-list" start="4"><li>В <code>airflow.cfg</code> найдите параметр <code>logging_config_class</code> и задайте ему значение <code>logging_conf.LOGGING_CONFIG</code></li></ol><ol type="1" id="317f8a8d-2cbb-446e-a6c4-b626097e9302" class="numbered-list" start="5"><li>Перезагрузите webserver и scheduler</li></ol><figure id="7ffd378d-e771-4476-a28f-0a6596f183bc" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-04-16_14-33-51.png"><img src="https://startdatajourney.com/uploads/redactor/2021-04-16_14-33-51.png"/></a></figure><p id="4aa81f26-78a6-435c-8fc0-ed2efc022767" class="">Готово. Теперь можно попробовать запустить DAG, где заведомо есть задача с ошибкой, уведомление в телеграм не заставит себя долго ждать.</p><p id="709fd868-1402-4d59-b814-9578fe23420f" class="">Код с logging-конфигом и телеграм-обработчиком лежит в репозитории в папке <a href="https://github.com/adilkhash/apache-airflow-course-materials/tree/master/config">config</a>.</p></div></article></body></html>

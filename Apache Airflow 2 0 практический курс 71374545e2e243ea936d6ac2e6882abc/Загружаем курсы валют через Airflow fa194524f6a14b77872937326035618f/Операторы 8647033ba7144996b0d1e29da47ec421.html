@@ -1,0 +1,686 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Операторы</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="8647033b-a714-4996-b0d1-e29da47ec421" class="page sans"><header><h1 class="page-title">Операторы</h1></header><div class="page-body"><h2 id="5784ee8d-0d42-4869-a508-fc8f7a1f4e5c" class=""><strong>create_table</strong></h2><p id="d80bdcb7-d1ce-42a7-8e55-c5bea64f4d75" class="">Первый таск из нашего пайплайна отвечает за создание таблицы, если её нет. В качестве базы данных используется PostgreSQL, можно поднять новый docker-образ базы либо использовать существующее соединение для Airflow. Если вы предпочитаете Docker, то достаточно выполнить команду:</p><pre id="b9df1573-0983-459e-9a31-5753f90dc88f" class="code code-wrap"><code>docker run -d -p 15432:5432 \
+-e POSTGRES_PASSWORD=password \
+-e POSTGRES_USER=airflow_user \
+-e POSTGRES_DB=airflow_examples \
+-v postgres_airflow_example:/var/lib/postgresql/data postgres:13.1
+</code></pre><p id="283727dd-3b98-4121-8791-a1052adc356b" class="">В этом случае на хост будет прокинут порт 15432 на котором крутится БД Postgres. Имя пользователя, пароль и название БД можно указать по своему желанию.</p><p id="f69701b5-3d0b-42a8-ab02-23c7515e15cc" class="">В Admin → Connections необходимо обновить соединение <code>postgres_default</code> как показано на скрине:</p><figure id="cfd4164c-b700-4402-8e10-9e45118e947c" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-03-11_15-47-39.png"><img src="https://startdatajourney.com/uploads/redactor/2021-03-11_15-47-39.png"/></a></figure><p id="7b3bce3d-9a11-4ea7-9c67-eb986f8da6df" class="">Это соединение используется по умолчанию для всех Postgres операторов, безусловно можно создать новое и явно указывать его ID при создании оператора.</p><p id="9e9a3d30-682a-488a-bc27-20294512540f" class="">Для работы с Postgres в Apache Airflow есть <a href="https://github.com/apache/airflow/blob/v2-0-stable/airflow/providers/postgres/operators/postgres.py#L25">PostgresOperator</a>. Под капотом он использует <a href="https://khashtamov.com/ru/postgresql-python-psycopg2/">библиотеку psycopg2</a> для работы с базой. Именно его мы будем использовать в двух из трёх наших операторах:</p><ol type="1" id="03457cec-2408-4bc6-8b35-653097ead983" class="numbered-list" start="1"><li>create_table</li></ol><ol type="1" id="17a2a149-5c55-428e-8c53-b24313d8c206" class="numbered-list" start="2"><li>insert_rate</li></ol><p id="f6f6f59c-068a-4612-9041-5b5a7737a068" class="">PostgresOperator может принимать запрос строкой либо читать его из файла. Я предпочитаю второй вариант, т.к. он делает код более читабельным без смешивания SQL и Python. Пример оператора с запросом строкой:</p><pre id="0fd95830-dee0-4f3f-9f81-3c9d772882ef" class="code code-wrap"><code>sql_task = PostgresOperator(
+    task_id=&#x27;sql_task_id&#x27;,
+    postgres_conn_id=&#x27;postgres_default&#x27;,
+    sql=&#x27;SELECT foo FROM bar;&#x27;,
+)
+</code></pre><p id="815767cc-d445-4333-8fea-31b0bd242a15" class="">Через указание пути до SQL файла:</p><pre id="95026e2c-a135-4e89-94f9-4f0ee7118717" class="code code-wrap"><code>sql_task = PostgresOperator(
+    task_id=&#x27;sql_task_id&#x27;,
+    postgres_conn_id=&#x27;postgres_default&#x27;,
+    sql=&#x27;sql/select_query.sql&#x27;,
+)
+</code></pre><p id="478f332a-7067-4e0e-98c8-abe66458bc89" class="">Мы выбираем второй вариант, поэтому необходимо подготовить SQL запрос создания таблицы и сохранить его в файл <code>create_table.sql</code>:</p><pre id="3b1fb19b-33bd-4c61-9201-0e357028e637" class="code code-wrap"><code>CREATETABLE IFNOTEXISTS currency_exchange_rates (
+    base VARCHAR(3)NOTNULL,
+    currency VARCHAR(3)NOTNULL,
+    rate NUMERIC(12, 3)NOTNULL,
+    date DATENOTNULL,
+UNIQUE (base, currency, date)
+);
+</code></pre><p id="07102711-e384-4349-b979-6b12dc8ee6a5" class="">При каждом запуске DAG будет выполняться таск <code>create_table</code>, поэтому в SQL выражении есть конструкция <code>IF NOT EXISTS</code>, которая означает, что таблица должна быть создана <strong>ТОЛЬКО</strong>, если её нет. То есть при повторном выполнении этого таска Postgres проигнорирует этот запрос, т.к. таблица уже будет существовать.</p><p id="6a5f57c7-0773-46c3-ad9a-4a8fa927b4b2" class="">Таблица <strong>currency_exchange_rates</strong>:</p><ol type="1" id="3c11941f-6a0c-40b9-b962-a6cf5e86ff95" class="numbered-list" start="1"><li>base — хранится код базовой валюты</li></ol><ol type="1" id="b5395ce3-9484-43e0-a44b-c4a05806f578" class="numbered-list" start="2"><li>currency — хранится код конвертируемой валюту</li></ol><ol type="1" id="182f3ebd-a887-4251-889c-49d55755a9e3" class="numbered-list" start="3"><li>rate — обменный курс между currency и base, т.е. стоимость base в currency</li></ol><ol type="1" id="bc2bf3c5-6fc2-4ef4-921b-9b23dfd0d7c6" class="numbered-list" start="4"><li>date — дата</li></ol><p id="1acb8889-2ad1-45bd-87cd-5566b538ca9f" class="">Свойство UNIQUE по трём столбцам нам необходимо, чтобы делать вставку через UPSERT. Если по какой-то причине таск с одной и той же датой будет запущен несколько раз нужно не допустить дублирования. Более подробно про UPSERT в PostgreSQL можно почитать <a href="https://www.postgresqltutorial.com/postgresql-upsert/">здесь</a>.</p><p id="565d9713-22bf-4b19-ba42-ad501f7983f7" class="">Итак, всё готово для создания первого оператора:</p><pre id="6ceaa883-0316-47af-bd51-ce5d76a8aeff" class="code code-wrap"><code>create_table = PostgresOperator(
+    task_id=&#x27;create_table_task&#x27;,
+    sql=&#x27;sql/create_table.sql&#x27;,
+    postgres_conn_id=&#x27;postgres_default&#x27;,
+)
+</code></pre><p id="83099925-7559-4b3d-8268-91a42d8fa615" class="">Путь SQL файла необходимо указывать относительно директории, где лежит сам DAG. В данном случае папка sql лежит в одной директории с кодом DAGа. Аргумент <code>postgres_conn_id</code> можно не указывать, т.к. по умолчанию он будет равен <code>postgres_default</code>, но я предпочитаю явно это делать.</p><h2 id="df852d07-eb8f-4a77-99de-d5924ed231a2" class=""><strong>get_rate</strong></h2><p id="d9146f64-41a1-4262-a3da-9e40dc7b3f4b" class="">Для таска <code>get_rate</code> мы напишем свой кастомный оператор, который будет тянуть данные из внешнего API. В качестве сервиса я предлагаю использовать <a href="https://currencyscoop.com/">CurrencyScoop</a>, у ребят есть бесплатный план по которому можно тянуть курсы валют. Ограничения есть по количеству запросов в месяц и на некоторые API методы, но нам этого хватит.</p><p id="c6169220-0267-4de7-a386-0db107670a7f" class="">Для работы с сервисом необходимо зарегистрироваться и получить API ключ. Ключ будет доступен сразу же после авторизации на сайте:</p><figure id="77367384-70ec-4853-baea-9f14afe540b9" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-03-11_16-25-23.png"><img src="https://startdatajourney.com/uploads/redactor/2021-03-11_16-25-23.png"/></a></figure><p id="fe3450f5-067a-4a80-a19a-3855f6078384" class="">Свой Operator и Hook для работы с сервисом мы напишем в следующем уроке, а пока давайте рассмотрим последний таск в нашем пайплайне — <strong>insert_rate</strong></p><h2 id="726fac8b-ed26-4cd1-9d9f-e96668c19a9d" class=""><strong>insert_rate</strong></h2><p id="ae8212cf-bd31-409c-88e0-241a8ef12035" class="">Для таска <code>insert_rate</code> также будем использовать PostgresOperator. Его задача — добавить запись о курсе валют в базу данных после успешного выполнения предыдущего таска <code>get_rate</code>.</p><p id="1908f137-42bf-4bab-906b-cdb43747c029" class="">Вставка данных будет происходить через UPSERT. Нередко бывают сбои и чтобы не допустить дублирования данных все таски в Airflow должны быть <a href="https://ru.wikipedia.org/wiki/%D0%98%D0%B4%D0%B5%D0%BC%D0%BF%D0%BE%D1%82%D0%B5%D0%BD%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C">идемпотентными</a>. В случае с таском <code>insert_rate</code> при обнаружении дубля по 3-м колонкам: base, currency и date, произойдёт обновление колонки rate вместо добавления ещё одной. Пример SQL запроса:</p><pre id="654ef0ce-a0b7-48b4-a225-22c45f94ef41" class="code code-wrap"><code>INSERTINTO
+    currency_exchange_rates
+VALUES (&#x27;USD&#x27;, &#x27;KZT&#x27;, 420.55, &#x27;2020-01-01&#x27;)
+ON CONFLICT (base, currency, date) DO
+UPDATESET rate = excluded.rate;
+</code></pre><p id="5fd6fd40-3476-417c-b981-1f6592c522c2" class="">Если в таблице currency_exchange_rates уже будет запись обменного курса USD/KZT за 1 января, то у этой строчки будет обновлена колонка rate на значение 420.55. Выражение <code>excluded.rate</code> ссылается на значение обменного курса, предложенного для вставки (новое значение).</p><p id="f1e275d6-6b14-44e3-850b-6090102b0335" class="">Код оператора:</p><pre id="e1ed04d9-6559-42e7-8e81-5538f7e97606" class="code code-wrap"><code>insert_rate = PostgresOperator(
+    task_id=&#x27;insert_rate&#x27;,
+    postgres_conn_id=&#x27;postgres_default&#x27;,
+    sql=&#x27;sql/insert_rate.sql&#x27;,
+params={
+        &#x27;base_currency&#x27;: &#x27;USD&#x27;,
+        &#x27;currency&#x27;: &#x27;KZT&#x27;,
+    }
+)
+</code></pre><p id="a203f361-045b-4c49-9693-54729c61c58a" class="">Обратите внимание на аргумент <em>params,</em> он позволяет передавать значения в SQL-шаблон. Конкретно в этом случае значения у нас статичные, но в конце модуля будет пример с созданием динамических тасков, где это актуально. Параметры в шаблоне доступны через переменную params. К ним можно обратиться так:</p><pre id="cf79293d-4441-4a30-91de-71f613b955ea" class="code code-wrap"><code>{{params.base_currency }}
+{{params.currency }}
+</code></pre><p id="44a9aab3-a464-4c47-b336-a3c4ed203c65" class="">А теперь давайте взглянем как выглядит файл с SQL запросом:</p><p id="3a19661b-448e-4818-953b-ff18f816ae11" class="">Код SQL шаблона:</p><pre id="8aaf2de9-2c4c-4ec6-8aa8-4b740ce1b928" class="code code-wrap"><code>INSERTINTO
+    currency_exchange_rates
+VALUES (&#x27;{{ params.base_currency }}&#x27;, &#x27;{{ params.currency }}&#x27;, {{ ti.xcom_pull(task_ids=&quot;get_rate&quot;) }}, &#x27;{{ execution_date.strftime(&quot;%Y-%m-%d&quot;) }}&#x27;)
+ON CONFLICT (base, currency, date)DO
+    UPDATE
+SET rate = excluded.rate;
+</code></pre><p id="9fc32054-d4b8-4787-96cf-63a13850cc7a" class="">Переменная execution_date вам уже хорошо знакома, с params тоже должно быть всё понятно. А что по поводу выражения?</p><pre id="b0fa8eb3-3ce2-4302-9498-0ea05df9b25e" class="code code-wrap"><code>{{ti.xcom_pull(task_ids=&quot;get_rate&quot;) }}
+</code></pre><p id="f379e670-426d-40cd-8943-0872df371aa1" class="">Переменная <code>ti</code> также как и <code>execution_date</code> доступна в контексте выполнения DAG и ссылается на инстанс текущего таска (PostgresOperator), инстанс также доступен под названием <code>task_instance</code>.Более подробно про внутреннее устройство XCom и как с ним работать я писал в заметке <a href="https://khashtamov.com/ru/apache-airflow-xcom/">Apache Airflow и XCom</a> в блоге.</p></div></article></body></html>

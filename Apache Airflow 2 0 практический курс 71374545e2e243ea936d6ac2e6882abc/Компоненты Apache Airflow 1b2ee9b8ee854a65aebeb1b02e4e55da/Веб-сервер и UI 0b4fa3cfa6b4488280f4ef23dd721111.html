@@ -1,0 +1,638 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Веб-сервер и UI</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0b4fa3cf-a6b4-4882-80f4-ef23dd721111" class="page sans"><header><h1 class="page-title">Веб-сервер и UI</h1></header><div class="page-body"><p id="41e6447c-4d5d-47bd-a7f9-0725c1d2af43" class="">Командой <code>airflow webserver -p 8080</code> мы запустили веб-сервер. Давайте познакомимся с пользовательским интерфейсом или как я его ещё называю — диспетчерской дата инженера.</p><p id="775ffc02-a026-4525-aae4-333396fd9f99" class="">В адресной строке браузере введите <code>http://127.0.0.1:8080</code>.</p><figure id="76e74d65-d668-4e1a-8973-1e4316133f3e" class="image"><a href="https://startdatajourney.com/uploads/redactor/web-ui-auth-login.jpg"><img src="https://startdatajourney.com/uploads/redactor/web-ui-auth-login.jpg"/></a></figure><p id="b550fe7e-a4a3-4da0-b86e-d6750e90e076" class="">В предыдущем разделе мы создали пользователя <code>airflow</code> с паролем <code>airflow</code>. Необходимо войти в систему под этими данными.</p><figure id="8e70f065-6927-4013-b1fd-29fa87f99b00" class="image"><a href="https://startdatajourney.com/uploads/redactor/web-ui-dags.jpg"><img src="https://startdatajourney.com/uploads/redactor/web-ui-dags.jpg"/></a></figure><p id="6e0d6ab3-f248-499f-a1f0-e9dac1fb6980" class="">Красной рамкой я выделил сообщение от Airflow, что ещё не запущен Планировщик. Что это за компонент я расскажу далее по тексту.</p><blockquote id="eb80b346-660e-487a-908b-9ba609a30b02" class="">The scheduler does not appear to be running. The DAGs list may not update, and new tasks will not be scheduled.</blockquote><p id="2791bfad-efea-489d-b9ae-d582f412bf7a" class="">На главном экране синей рамкой я выделил список примеров, которые Airflow грузит в панель по умолчанию. Чтобы отключить их загрузку необходимо в <code>airflow.cfg</code> поменять параметр:</p><pre id="6aae1d6c-b505-49d0-9bef-d564955b014d" class="code code-wrap"><code>load_examples = False
+</code></pre><p id="0161364a-bafb-408c-88e9-ce90a26e4fb1" class="">Если ранее этот параметр был <code>True</code> и вы инициализировали БД, то после изменения на <code>False</code> необходимо сбросить всю информацию о пайплайнах командой:</p><pre id="0211fdc3-bc24-40c1-b510-22a8b8b8aad8" class="code code-wrap"><code>airflow db reset
+</code></pre><p id="f6860669-aa0c-43f3-8c0c-ab6dac8ef9f0" class="">Пересоздавать пользователей не нужно.</p><p id="452c0c2f-5dd8-4cb4-afaf-eeac5a2b45dd" class="">Примеры нужны исключительно в ознакомительных целях, никакой иной пользы они не несут.</p><p id="b8e99579-60be-4ee9-a6a5-a02b1de6f29c" class="">Сразу после входа в панель Airflow вы видите перед собой список всех DAG, которые подгрузил Airflow для вас:</p><figure id="1b2aae5b-f2f2-4c6d-b71b-9ba8fe198f52" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-02-01_14-38-21.png"><img src="https://startdatajourney.com/uploads/redactor/2021-02-01_14-38-21.png"/></a></figure><ul id="43053303-7cc5-471a-abf4-8bcee7be3676" class="bulleted-list"><li><strong>Pause/Unpause DAG</strong> — слева находится переключатель для включения/выключения DAG. По умолчанию все новые DAG будут остановлены. Чтобы запустить DAG его необходимо предварительно включить.</li></ul><ul id="df7a5d06-8c86-43e8-8c8c-28eee4dd36c7" class="bulleted-list"><li><strong>Колонка Owner</strong> обозначает владельца/автора DAG. Эта опция задаётся в коде, позже мы поговорим об атрибутах DAG, создавая свой первый пайлайн.</li></ul><ul id="12822235-0541-466e-b61f-2f1ff1f5c087" class="bulleted-list"><li><strong>Runs</strong> — показывает состояние запусков прошлых DAG. Есть 3 состояния:<ol type="1" id="209d8be1-ca0f-422b-85bb-4e3b3de26e89" class="numbered-list" start="1"><li>Успешно выполнен</li></ol><ol type="1" id="1cd5b721-7ca3-43e5-acbb-d3181559d0a8" class="numbered-list" start="2"><li>Выполняется</li></ol><ol type="1" id="826aa0bc-7578-43fa-b356-e9a1cbe2f59f" class="numbered-list" start="3"><li>Есть ошибки при выполнении</li></ol></li></ul><ul id="d82f5153-22a3-4535-b182-36844791cca1" class="bulleted-list"><li><strong>Schedule</strong> — показывает с какой периодичностью будет запускаться DAG. Если значение None, то запуска по расписанию не будет, но можно запускать вручную, например.</li></ul><ul id="c3361302-fc40-44c7-94d5-15a4a4da0fcc" class="bulleted-list"><li><strong>Last Run</strong> — дата и время последнего запуска DAG</li></ul><ul id="07b16395-f638-4602-9501-1e23b716c7ba" class="bulleted-list"><li><strong>Recent Tasks</strong> — отражает текущее состояние последних запусков DAG (по факту последний запуск DAG и его операторов)</li></ul><ul id="e9943971-d719-4dfd-8419-6646f4c482c7" class="bulleted-list"><li><strong>Actions</strong> — кнопки манипуляции с DAG. Можно запустить DAG вручную, обновить или удалить DAG.</li></ul><ul id="170b0fd9-3d15-4481-b1a3-38e1bd3f7f17" class="bulleted-list"><li><strong>Links</strong> — список для быстрого доступа к просмотру кода DAG, деталей выполнения, просмотру в виде графа или диаграммы Ганта, анализ времени выполнения задач и т.д.</li></ul><h2 id="d0020d7e-4380-4a4b-99c6-ffad61cb651d" class=""><strong>Просмотр DAG</strong></h2><p id="7221c6f7-8329-49a5-8370-91eea910ac81" class="">Если кликнуть на любой DAG из списка, то мы увидим детальную информацию по нему.</p><figure id="330683d2-7e00-40a4-a605-e17704bbc084" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-02-01_14-39-43.png"><img src="https://startdatajourney.com/uploads/redactor/2021-02-01_14-39-43.png"/></a></figure><ul id="012eb0af-dd2f-4b88-b238-9019ab4bff47" class="bulleted-list"><li><strong>Tree View</strong> — просмотр DAG и зависимостей между операторами в виде дерева, также справа находится статус выполнения всех операторов, входящих в DAG с легендой. На статусы можно кликать, чтобы посмотреть более детальную информацию.</li></ul><ul id="1cee810e-04b8-42bc-85c1-700a1473dd96" class="bulleted-list"><li><strong>Graph View</strong> — фактически то же самое, что и Tree View, только в виде графа.</li></ul><ul id="b7d5b491-a067-4c90-9e0b-283d5fa14d0f" class="bulleted-list"><li><strong>Task Duration</strong> — график времени выполнения DAG и операторов.</li></ul><ul id="a5022f23-6283-42bd-a6a9-34715684ff5a" class="bulleted-list"><li><strong>Task Tries</strong> — показывает график повторных запусков операторов по периодам. Также в Airflow есть механизм повторных запусков в случае неудач, о нём мы поговорим в практической части.</li></ul><ul id="b2acaa20-6dd4-46e3-89a5-442fa76aad54" class="bulleted-list"><li><strong>Landing Times</strong> — график показывает время (в зависимости от периодичности, это могут быть дни, минуты и т.д. по оси Y) прошедшее относительно периода запуска и непосредственным запуском (DagRun) планировщиком. Представьте что есть DAG с schedule_interval=@daily запуск с execution_date=2020-01-01 должен быть запланирован на 2020-01-02T00:00:00, но планировщик из-за нагрузки запускает его в 2020-01-02T11:00:00, тогда Landing Time для него будет 11 часов или 0.46 дней.</li></ul><ul id="a39e086f-ea16-418c-8659-9e454dea81ae" class="bulleted-list"><li><strong>Gantt</strong> — отображает историю выполнения DAG в виде Диаграммы Ганта. Очень удобно, когда в DAG входит множество операторов, которые могут выполняться параллельно.</li></ul><ul id="34e1aae3-8745-43f3-81b8-37d5e60edb0f" class="bulleted-list"><li><strong>Details</strong> — детальная информация по DAG, включая названия операторов, автора, начальное время старта DAG и т.д.</li></ul><ul id="9a205aee-f0c3-470a-8057-26402da19f7d" class="bulleted-list"><li><strong>Code</strong> — просмотр кода DAG.</li></ul><h2 id="76d76a4f-de0f-4d48-b9d1-1f787ea9ecb0" class=""><strong>Панель администратора Airflow</strong></h2><figure id="9d9a4629-aa09-4d36-988b-df1a9f9957d5" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-02-01_14-58-45.png"><img src="https://startdatajourney.com/uploads/redactor/2021-02-01_14-58-45.png"/></a></figure><h3 id="56d37961-2542-45e8-814a-fc9248092137" class=""></h3><h3 id="0f3e13a4-a27f-49e6-a6bd-6f7177371266" class=""><strong>Variables</strong></h3><p id="c8bcdc0d-8fd7-4782-b325-4312f6bb3915" class="">В этом разделе можно управлять переменными, которые будут храниться в базе данных Airflow. Удобно для хранения различной информации, например, адреса хостов удалённых сервисов. Нежелательно в этом разделе хранить данные доступов, т.к. переменные хранятся в открытом виде и могут быть скомпрометированы третьими лицами.</p><h3 id="1c1b3f81-b61e-496e-8dca-f3f8f416ad44" class=""><strong>Configurations</strong></h3><p id="eefc2d0b-0d9f-4cb1-9ca4-ecc4262a2afb" class="">Раздел позволяет редактировать настройки Airflow, используя графический интерфейс. По умолчанию опция отключена из соображений безопасности.</p><h3 id="cf2d75dd-71ac-4b0d-82be-89259d8aa460" class=""><strong>Connections</strong></h3><p id="abe050f0-6445-4726-97a9-84048426b83c" class="">Раздел для хранения данных о доступе к различным сервисам: базам данных, облачным провайдерам, сторонним API сервисам и т.д. Я не рекомендую в DAG коде хранить пароли и секретные ключи, а использовать для этого раздел Connections, например.</p><p id="eafcec0c-cdbd-4069-89b0-b6f8740ab46a" class="">При использовании Connections в коде вам необходимо лишь будет передать значение conn_id. На практике мы увидим как это удобно и просто.</p><h3 id="8a3a9e88-8d86-4641-b017-751e1e0f83c1" class=""><strong>Plugins</strong></h3><p id="b0d01e94-227b-4bed-85c2-d057314858af" class="">Раздел для управления плагинами Airflow. По умолчанию плагины можно подгрузить, разместив код по пути <code>AIRFLOW_HOME/plugins</code>.</p><h3 id="1beab0d0-469b-431e-a536-98f9e16a8898" class=""><strong>Pools</strong></h3><p id="ec7559e0-8387-467f-a19a-8345f9aed83c" class="">Возможность задать пул или другими словами некое ограничение на количество параллельно выполняющихся задач. Представим, что вы хотите регулярно качать данные с внешнего сервиса. У сервиса есть ограничение на количество одновременных соединений — 2. В этом случае вы создаёте пул со значением 2 и присваиваете ему имя. Далее во всех операторах, отвечающих за скачивание данных, передаёте название этого пула.</p><h3 id="be1d8931-c042-431b-b997-d32d91d8cafc" class=""><strong>XComs</strong></h3><p id="8f2b1da6-96fc-4729-a9ef-7ed4320a9e78" class="">Это механизм обмена сообщениями между операторами. Т.к. задачи могут выполняться на разных компьютерах, то получить возвращаемое значение одного оператора и передать другому привычным способом не получится (например, путём цепочек вызовов или присвоением значения переменной). Для таких ситуаций и создан XCom (cross-communication). Механизм работает через базу данных. По сути это аналог key-value базы, один оператор записывает значение под определённым ключом, а другой оператор может получить это значением, используя этот ключ. Не рекомендуется таким способом передавать большие сообщения, т.к. это требует дополнительных накладных расходов.</p><p id="699b12bd-1153-4a1b-9fdf-fdeda1ffce79" class="">В этом разделе можно увидеть все существующие сообщения, созданные операторами.</p></div></article></body></html>

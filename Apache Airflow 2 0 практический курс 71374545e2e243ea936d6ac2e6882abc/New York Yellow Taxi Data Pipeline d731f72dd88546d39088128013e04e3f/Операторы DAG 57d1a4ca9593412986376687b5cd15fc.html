@@ -1,0 +1,785 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Операторы DAG</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="57d1a4ca-9593-4129-8637-6687b5cd15fc" class="page sans"><header><h1 class="page-title">Операторы DAG</h1></header><div class="page-body"><p id="2e26477d-2257-4479-8f74-857b79e0e2f8" class="">Давайте разберём каждый оператор из будущего DAG по отдельности.</p><h3 id="de7ecab1-dba5-4834-9a40-827c5ca59542" class=""><strong>check_file</strong></h3><p id="66d3d827-6412-47db-9363-8bab20adbcb8" class="">Первым оператором будет <code>SimpleHttpOperator</code> под названием <code>check_file</code>. <code>SimpleHttpOperator</code> входит в стандартный набор операторов Apache Airflow. Его задача — выполнить HTTP запрос и вернуть ответ. Мы его будем использовать для проверки существования файла перед его загрузкой.</p><p id="89441f98-1fd1-4149-a89b-8441861bc2b5" class="">Чтобы не скачивать весь файл целиком я предлагаю использовать метод HEAD. Он идентичен стандартному GET с той лишь разницей, что ответ будет без тела, вернутся лишь заголовки и статус ответа. Более подробно о нём можно почитать <a href="https://developer.mozilla.org/ru/docs/Web/HTTP/Methods/HEAD">здесь</a>.</p><p id="4e0a347e-3cec-47ba-b4c8-e7560ce638df" class="">Также <code>SimpleHttpOperator</code> отличный способ показать как работать с разделом Connections о котором я упоминал в разделе про Компоненты → Веб-сервер и UI. <a href="https://airflow.apache.org/docs/apache-airflow-providers-http/stable/operators.html#simplehttpoperator">Ссылка на официальную документацию</a> по этому оператору.</p><p id="591d2132-bd22-475a-baec-0d8f89f5e2c9" class="">При инициализации оператор принимает несколько аргументов:</p><ul id="c6d38c4c-cf12-4b35-bd35-cc10500e10e6" class="bulleted-list"><li>task_id — уникальное название оператора</li></ul><ul id="5bb7a442-2150-4160-9dce-15a8694dcd03" class="bulleted-list"><li>method — HTTP метод, мы будем использовать HEAD</li></ul><ul id="6a7034d1-fd7a-4857-9ea3-e80f40a68be7" class="bulleted-list"><li>http_conn_id — название ключа соединения, которое мы создадим через раздел Connections. Оператору нельзя передать полную ссылку напрямую.</li></ul><ul id="3bf377fe-febf-40ab-8380-fa9d4b75d025" class="bulleted-list"><li>endpoint — URI, т.е. это всё, что есть в ссылке после указания домена. Например, если полная ссылка на данные за декабрь 2020 года <a href="https://nyc-tlc.s3.amazonaws.com/trip+data/yellow_tripdata_2020-12.csv">https://nyc-tlc.s3.amazonaws.com/trip+data/yellow_tripdata_2020-12.csv</a>, то endpoint здесь это <a href="https://nyc-tlc.s3.amazonaws.com/trip+data/yellow_tripdata_2020-12.csv"><code>/trip+data/yellow_tripdata_2020-12.csv</code></a> или <a href="https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-12.csv"><code>yellow_tripdata_2020-12.csv</code></a>. Он меняется в зависимости от года и месяца.</li></ul><ul id="f0bbff60-8fa2-4fa5-a3ff-602ea80e53b4" class="bulleted-list"><li>dag — инстанс объекта DAG (если используется декоратор dag, то этот аргумент можно опустить)</li></ul><p id="c44b80e0-a5ae-4655-8918-f1ac6323a44e" class="">Также у оператора есть и другие принимаемые аргументы, например, тело запроса, заголовки и даже есть возможность передать callable объект для обработки ответа в аргументе <code>response_check</code>. Но для нашего пайплайна это не нужно.</p><h3 id="def74c5d-7999-4575-877a-48968f190445" class=""><strong>Создание connection id</strong></h3><p id="cb656614-ff63-489e-b316-4795b9e1d707" class="">В работе с Apache Airflow вы неоднократно столкнётесь с Connections, т.к. система поощряет использование идентификаторов соединения вместо указания ссылки в коде. Для создания идентификатора необходимо перейти в раздел Admin → Connections и нажать на <code>+</code>:</p><figure id="708394f1-ad5b-4afa-98be-b5102730f1c6" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-03-05_10-07-08.png"><img src="https://startdatajourney.com/uploads/redactor/2021-03-05_10-07-08.png"/></a></figure><p id="9e4c1c2a-4372-4967-85e3-d985cd3e80ae" class="">На форме вам необходимо заполнить несколько полей:</p><ul id="192764b3-e7de-494b-9125-0d6e631816c8" class="bulleted-list"><li><strong>Conn Id</strong>: nyc_yellow_taxi_id</li></ul><ul id="a36b9645-9d87-4842-b9e7-2c874b0c0d88" class="bulleted-list"><li><strong>Conn Type</strong>: HTTP</li></ul><ul id="0350b278-baeb-4797-84e6-9f88e031b3fb" class="bulleted-list"><li><strong>Host</strong>: <a href="https://s3.amazonaws.com/nyc-tlc/trip+data/">https://s3.amazonaws.com/nyc-tlc/trip+data/</a></li></ul><figure id="fdb59bd0-c636-44ea-bdc8-e8a9b931fc85" class="image"><a href="https://startdatajourney.com/uploads/redactor/2021-03-05_10-11-59.png"><img src="https://startdatajourney.com/uploads/redactor/2021-03-05_10-11-59.png"/></a></figure><p id="ef54e2d5-bdf4-4a1c-a0b6-487a7e00da38" class="">В <code>endpoint</code> будем передавать название файла, т.к. эта часть меняется в зависимости от года и месяца.</p><p id="ece3946f-bc90-42d7-93fd-b63d265da3c5" class="">Вот как выглядит код оператора проверки наличия файла:</p><pre id="561dc99f-6c15-47c7-ae3e-5b344e0b4caa" class="code code-wrap"><code>check_file = SimpleHttpOperator(
+    method=&#x27;HEAD&#x27;,
+    endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+    task_id=&#x27;check_file&#x27;,
+    http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;
+)
+</code></pre><p id="db9619b9-61ec-4290-9676-b5cce7360edd" class="">Обратите внимание на <code>endpoint</code>. У операторов Airflow есть т.н. template fields, куда можно передавать строку-шаблон и Airflow подставит нужные значения в зависимости от контекста. Переменная <code>execution_date</code> входит в набор <a href="https://airflow.apache.org/docs/apache-airflow/stable/macros-ref.html#default-variables">переменных по умолчанию</a>, доступных в контексте выполнения DAG (DagRun), она представляет из себя объект типа Pendulum из пакета <a href="https://pendulum.eustace.io/">pendulum</a>, это datetime на стероидах. В качестве шаблонизатора Apache Airflow использует <a href="https://palletsprojects.com/p/jinja/">Jinja2</a>. <code>execution_date</code> указывает на дату исполнения, <strong>это не дата на компьютере</strong> в момент выполнения DAG, а дата, рассчитанная относительно start_date и schedule interval. Пример как считается <code>execution_date</code> я описывал <a href="https://startdatajourney.com/ru/course/apache-airflow-2/modules/11/34/3">здесь</a>.</p><h3 id="af46e631-8440-4c7c-a85b-24a34b98bb5a" class=""><strong>download_file</strong></h3><p id="76b2f40b-8e3b-4353-969c-cae9279b54f0" class="">Следующий оператор — <code>PythonOperator</code> с task_id <code>download_file</code>. Его задача загрузить файл с веб-сайта и уложить в S3 в сжатом виде (будем использовать gzip).</p><p id="e409e9ae-d8e9-4ec5-85cf-5e2018950251" class="">PythonOperator принимает объект типа callable, который будет выполнен, поэтому загрузку файла мы вынесем в отдельную функцию. Вот код этой функции:</p><pre id="f429d4e9-3228-4f3a-9955-9502a06f3546" class="code code-wrap"><code>defdownload_dataset(year_month: str):
+    url = (
+        f&#x27;https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_{year_month}.csv&#x27;
+    )
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+
+    s3 = S3Hook(&#x27;aws_connection_id&#x27;)
+
+    s3_path = f&#x27;s3://nyc-yellow-taxi-raw-data/yellow_tripdata_{year_month}.csv.gz&#x27;
+    bucket, key = s3.parse_s3_url(s3_path)
+
+with NamedTemporaryFile(&#x27;w&#x27;, encoding=&#x27;utf-8&#x27;, delete=False)as f:
+for chunkin response.iter_lines():
+            f.write(&#x27;{}\n&#x27;.format(chunk.decode(&#x27;utf-8&#x27;)))
+    s3.load_file(f.name, key, bucket, replace=True, gzip=True)
+
+return s3_path
+</code></pre><p id="b4e03e14-cb45-47d6-9d91-ab517612685f" class="">Я предпочитаю выносить эту логику в отдельный модуль или даже пакет (если одного модуля недостаточно), поэтому в репозитории есть модуль <a href="https://github.com/adilkhash/apache-airflow-course-materials/blob/master/dags/nyc_taxi/functions.py">functions.py</a>.</p><p id="f636d2c9-93d2-43a3-aa25-3ca9568e03b6" class="">Функция <code>download_dataset</code> принимает 1 аргумент, это строка вида <code>2020-12</code>: год и месяц. Скачивание файла производится пакетом <a href="https://khashtamov.com/ru/python-requests/">requests</a>. Для работы с S3 я использую готовый Hook из Airflow — S3Hook.</p><p id="463caf38-6fa2-410c-a087-e030a57b0069" class="">Хуки это внешние интерфейсы для работы с различными сервисами: базы данных, внешние API ресурсы, распределенные хранилища типа S3, redis, memcached и т.д. Хуки являются строительными блоками операторов и берут на себя всю логику по взаимодействию с хранилищем конфигов и доступов. Используя хуки можно забыть про головную боль с хранением секретной информации в коде (например, паролей).</p><p id="8677520b-9b0b-4cef-9f3a-322614084884" class="">S3Hook даёт разработчику высокоуровневый интерфейс для работы с AWS S3, а под капотом использует библиотеку boto3. Самый главный аргумент, который нужно передать S3Hook — <code>aws_conn_id</code>. Соединение также необходимо создать через раздел Admin → Connections.</p><p id="ea8714df-5128-494b-b3f5-6ad8ecded596" class="">В коде прописан путь до S3 объекта, куда будет сохранён загружаемый файл с данными. Далее с веб-ресурса файл сохраняется во временный файл и загружается на S3 с использованием gzip=True. Функция возвращает путь до S3 объекта, которым воспользуется следующий оператор.</p><p id="b3deef86-4837-4ae4-9b05-c50c35485a1f" class="">Демонстрацию создания бакетов и доступов в Apache Airflow смотрите в следующем видео.</p><p id="87cd7c72-8b4c-414b-b665-c3dc18915515" class="">
+</p><figure id="baf928ad-35bf-4754-ba70-cd23317341de"><div class="source"><a href="https://www.notion.so/5318f29d999c496b813c316043d91e5f">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5318f29d-999c-496b-813c-316043d91e5f/aws-s3-bucket-setup.mp4</a></div></figure><p id="5a11a278-c11b-42b1-ae6f-e8d7cedfaa90" class="">Если не хочется использовать S3, то можно рассмотреть альтернативу minIO (полностью совместима с AWS S3). О том как установить и запустить смотрите в следующем шаге.</p><p id="89a98bc6-71f1-4805-aed8-7bd885d53074" class="">
+</p><figure id="3685a64d-d36f-439b-90aa-a0b81f69c9f5"><div class="source"><a href="https://www.notion.so/bcb483bd41f648699ac06be8d25d17e1">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bcb483bd-41f6-4869-9ac0-6be8d25d17e1/minio-setup-demo.mp4</a></div></figure><p id="666428b8-78fd-4f9f-8251-edfba7c0e913" class=""><strong>Внимание</strong>. При настройке соединения с minIO необходимо в extra также добавить адрес хоста. Вот полный пример настроек.</p><pre id="d613af02-575c-4177-9610-c40326807cea" class="code code-wrap"><code>{
+    &quot;aws_access_key_id&quot;:&quot;access_key&quot;,
+    &quot;aws_secret_access_key&quot;: &quot;secret_key&quot;,
+    &quot;host&quot;: &quot;http://127.0.0.1:9000&quot;
+ }
+</code></pre><p id="2a38b1d0-23d5-44e4-ab3f-c1bc836df3c1" class="">Код оператора download_file и DAG:</p><pre id="f3c5efc6-7b66-4f92-bba9-e034deea80f0" class="code code-wrap"><code># опускаю импорты
+
+@dag(default_args=default_args,
+     schedule_interval=&#x27;@monthly&#x27;,
+     start_date=datetime(2020, 1, 1),
+)
+defnyc_taxi_dataset_dag():
+
+    check_file = SimpleHttpOperator(
+        method=&#x27;HEAD&#x27;,
+        endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+        task_id=&#x27;check_file&#x27;,
+        http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;
+    )
+
+    @task
+defdownload_file():
+        context = get_current_context()
+return download_dataset(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;))
+</code></pre><p id="ed7ea285-c1a6-43ef-a23f-c29d0ac23c8b" class="">Обратите внимание, что декорируемая функция вызывает <a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts.html#accessing-current-context">get_current_context</a>. Эта функция возвращает контекст выполнения DAG, в нём хранится различная полезная информация в том числе настройки, текущая дата выполнения (execution_date) и многое другое. Нам нужна текущая дата выполнения для передачи года и месяца в функцию <code>download_dataset</code>. Вызов <code>get_current_context</code> вне оператора вернёт ошибку, т.к. отсутствует контекст.</p><h3 id="c47d1ad2-9f52-4ee7-8a0d-e3157c215807" class=""><strong>to_parquet</strong></h3><p id="c481f708-f37d-433b-8df8-af106d1324bf" class="">Последний оператор задача которого — конвертировать CSV в Parquet и уложить обратно в S3. Код функции преобразования:</p><pre id="12205d77-eb84-4e78-8255-f031111db091" class="code code-wrap"><code>defconvert_to_parquet(year_month: str, s3_path: str):
+    s3 = S3Hook(&#x27;minio_id&#x27;)
+    bucket, key = s3.parse_s3_url(s3_path)
+    file_path = s3.download_file(key, bucket)
+
+with gzip.open(file_path, mode=&#x27;rb&#x27;)as f:
+        df = pd.read_csv(f)
+
+    current_month = dt.datetime.strptime(year_month, &#x27;%Y-%m&#x27;)
+    next_month = current_month.replace(month=current_month.month + 1)
+
+    df[&#x27;tpep_pickup_datetime&#x27;] = pd.to_datetime(df[&#x27;tpep_pickup_datetime&#x27;])
+    df = df[
+        (df[&#x27;tpep_pickup_datetime&#x27;] &gt;= f&#x27;{current_month:%Y-%m-%d}&#x27;) &amp;
+        (df[&#x27;tpep_pickup_datetime&#x27;] &lt; f&#x27;{next_month:%Y-%m-%d}&#x27;)
+        ]
+    df[&#x27;pickup_date&#x27;] = df[&#x27;tpep_pickup_datetime&#x27;].dt.strftime(&#x27;%Y-%m-%d&#x27;)
+
+    s3_path = f&#x27;s3://nyc-yellow-taxi-parquet-data/yellow_tripdata_{year_month}.parquet&#x27;
+    bucket, key = s3.parse_s3_url(s3_path)
+
+with NamedTemporaryFile(&#x27;wb&#x27;, delete=False)as f:
+        df.to_parquet(f)
+
+    s3.load_file(
+        f.name,
+        key,
+        bucket,
+        replace=True,
+    )
+return s3_path
+</code></pre><p id="4975daaf-d3c6-4d35-98be-55a8bd638584" class="">Код использует библиотеку pandas для очистки данных и конвертирования в Parquet. Для работы с parquet предварительно необходимо установить библиотеку pyarrow:</p><pre id="9d332171-c14c-4f23-908e-a9b5ca82858d" class="code code-wrap"><code>pip install pyarrow==3.0.0
+</code></pre><p id="ca4a2fc6-fb52-46f9-a773-0ce6cbe74dd5" class="">Если вы никогда не работали с pandas, то вам поможет мой <a href="https://khashtamov.com/ru/pandas-introduction/">туториал по работе с этой библиотекой</a>. В коде функции используется всё тот же <code>S3Hook</code> для загрузки файла из S3 (который был сохранён таском download_file), и укладки Parquet в другой бакет S3.</p><p id="98643cba-3635-4d7b-a27f-9baca7c200f4" class=""><strong>Код DAG</strong></p><pre id="280a6985-916a-479c-9d9d-d93919db181d" class="code code-wrap"><code>@dag(default_args=default_args,
+     schedule_interval=&#x27;@monthly&#x27;,
+     start_date=datetime(2020, 1, 1),
+)
+def nyc_taxi_dataset_dag():
+
+    check_file = SimpleHttpOperator(
+        method=&#x27;HEAD&#x27;,
+        endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+        task_id=&#x27;check_file&#x27;,
+        http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;
+    )
+
+    @task
+    def download_file():
+        context = get_current_context()
+        return download_dataset(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;))
+
+    @task
+    def to_parquet(file_path: str):
+        context = get_current_context()
+        return convert_to_parquet(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;), file_path)
+</code></pre><p id="b4d28e24-2e93-4715-bb72-59fd65cd0693" class="">Напомню, что я использую TaskFlow API. Если вам интересно как выглядит код в старом представлении, то <a href="https://github.com/adilkhash/apache-airflow-course-materials/blob/master/dags/nyc_taxi_pre_2/__init__.py">сморите в репозитории</a>.</p><p id="2bbb69ce-cae3-4af3-a34e-051692b17fa1" class="">Обратите внимание, что таск <code>to_parquet</code> принимает аргумент <code>file_path</code>. Это путь до S3-объекта, который был сохранён предыдущим таском <code>download_file</code>.</p><p id="8a0c0f7e-09d4-4126-b756-12d4dd1c12c1" class="">Чтобы передать результат выполнения одного оператора в следующий, необходимо ниже написать следующий код:</p><pre id="f794fe08-3aff-45ad-96e5-51e1618522c5" class="code code-wrap"><code>file_path = download_file()
+parquet_file_path = to_parquet(file_path)
+</code></pre><p id="e5bc1b02-1329-40e5-9e4f-c28b936a7424" class="">Он совпадает с тем как обычно вызываются функции и результат передаётся дальше. Вся магия &quot;бесшовной&quot; передачи данных от одного оператора к другому происходит за счёт декоратора task. При вызове функции, обернутой в task, возвращается инстанс класса <a href="https://github.com/apache/airflow/blob/master/airflow/models/xcom_arg.py#L26">XComArg</a>. Если функция, переданная в <code>PythonOperator</code>, возвращает значение, то по умолчанию оно записывается в XCom. XComArg это класс-обёртка или адаптер, который умеет извлекать это значение, т.к. принимает на вход оператор и контекст (в методе <code>resolve</code>). Поэтому когда в коде мы передаём в функцию <code>to_parquet</code> инстанс класса XComArg (<code>file_path</code>), Airflow понимает что это за класс и за кулисами получает из XCom результат выполнения <code>download_file</code>(путь до загруженного S3-объекта). До появления TaskFlow API это необходимо было <a href="https://github.com/adilkhash/apache-airflow-course-materials/blob/master/dags/nyc_taxi_pre_2/__init__.py#L19">делать вручную</a>.</p><p id="9c169eeb-916b-4329-bde1-1282f9dc82b2" class="">Объявление зависимостей происходит тем же путём что и в первом примере DAG только оперируем мы теперь не операторами, а инстансами класса XComArg:</p><pre id="80a206b2-e6df-4ca2-bae1-f7b1e9d638b0" class="code code-wrap"><code>file_path = download_file()
+parquet_file_path = to_parquet(file_path)
+
+check_file &gt;&gt; file_path &gt;&gt; parquet_file_path
+</code></pre><p id="a8cac9e2-b1e9-4adc-9f23-8693bacd58cc" class="">Важно не забывать вызывать функции, обернутые в task, чтобы получить инстанс класса XComArg. <code>check_file</code> в этом случае уже является инстансом оператора <code>SimpleHttpOperator</code>.</p><p id="d490f13b-f149-4095-8cd9-c8dc5d8f4115" class="">Чтобы Airflow Scheduler корректно обнаружил DAG, необходимо также вызвать обернутую в декоратор dag функцию и присвоить значение переменной в глобальном пространстве. Полный код DAG ниже:</p><pre id="43aa6c58-adbf-4aa9-8b7d-17c334427823" class="code code-wrap"><code>from datetimeimport datetime
+
+from airflow.decoratorsimport dag, task
+from airflow.operators.pythonimport get_current_context
+from airflow.providers.http.operators.httpimport SimpleHttpOperator
+from .functionsimport download_dataset, convert_to_parquet
+
+default_args = {
+    &#x27;owner&#x27;: &#x27;airflow&#x27;,
+}
+
+@dag(default_args=default_args,
+     schedule_interval=&#x27;@monthly&#x27;,
+     start_date=datetime(2020, 1, 1),
+)
+defnyc_taxi_dataset_dag():
+
+    check_file = SimpleHttpOperator(
+        method=&#x27;HEAD&#x27;,
+        endpoint=&#x27;yellow_tripdata_{{ execution_date.strftime(&quot;%Y-%m&quot;) }}.csv&#x27;,
+        task_id=&#x27;check_file&#x27;,
+        http_conn_id=&#x27;nyc_yellow_taxi_id&#x27;
+    )
+
+    @task
+defdownload_file():
+        context = get_current_context()
+return download_dataset(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;))
+
+    @task
+defto_parquet(file_path: str):
+        context = get_current_context()
+return convert_to_parquet(context[&#x27;execution_date&#x27;].strftime(&#x27;%Y-%m&#x27;), file_path)
+
+    file_path = download_file()
+    parquet_file_path = to_parquet(file_path)
+
+    check_file &gt;&gt; file_path &gt;&gt; parquet_file_path
+
+nyc_dag = nyc_taxi_dataset_dag()</code></pre></div></article></body></html>
